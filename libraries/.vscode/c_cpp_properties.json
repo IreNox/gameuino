@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Arduino",
+            "includePath": [
+                "E:\\Misc\\arduino-1.8.5\\hardware\\arduino\\avr\\cores\\arduino",
+                "E:\\Misc\\arduino-1.8.5\\hardware\\tools\\avr\\avr\\include",
+                "E:\\Misc\\arduino-1.8.5\\hardware\\tools\\avr\\lib\\gcc\\avr\\4.9.2\\include",
+				"E:\\Misc\\arduino-1.8.5\\hardware\\arduino\\avr\\variants\\mega",
+				"E:\\Misc\\arduino-1.8.5\\hardware\\arduino\\avr\\libraries\\SPI\\src"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": false,
+                "path": [
+                    "E:\\Misc\\arduino-1.8.5\\hardware\\arduino\\avr\\cores\\arduino"
+                ]
+            },
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 3
+}
