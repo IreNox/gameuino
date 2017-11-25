@@ -1,4 +1,4 @@
-#include "TikiResource.h"
+#include "tiki_resource.h"
 
 namespace tiki
 {
