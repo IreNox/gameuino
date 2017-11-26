@@ -81,7 +81,7 @@ namespace tiki
 		inputState = min( inputState, 512 );
 		inputState = max( inputState, -512 );
 
-		player.speedY = inputState;
+		player.speedY = (player.speedY + inputState) / 2;
 		player.moveY -= (inputState * 250);
 		
 		if( abs( player.moveY ) < (512 * 60) )
@@ -90,7 +90,7 @@ namespace tiki
 		}
 
 		const sint32 playerDelta = player.moveY / (512 * 60);
-		player.moveY -= playerDelta *  (512 * 60);
+		player.moveY -= (playerDelta *  (512 * 60));
 
 		const uint8 oldPos = player.rect.pos.y;
 		sint16 newPos = player.rect.pos.y;
