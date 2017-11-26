@@ -3,6 +3,7 @@
 	"parameters": {
 		"character_width": 5,
 		"character_height": 7,
-		"character_first": "+"
+		"character_first": "+",
+		"character_last": "Z"
 	}
 }

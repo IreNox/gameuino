@@ -28,13 +28,10 @@
     <ClInclude Include="include\font_builder.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\image_writer.h">
+    <ClInclude Include="include\base.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="third_party\crc_32.h">
-      <Filter>third_party</Filter>
-    </ClInclude>
-    <ClInclude Include="include\base.h">
+    <ClInclude Include="include\image.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -45,10 +42,10 @@
     <ClCompile Include="sources\font_builder.cpp">
       <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="sources\image_writer.cpp">
+    <ClCompile Include="sources\main.cpp">
       <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="sources\main.cpp">
+    <ClCompile Include="sources\image.cpp">
       <Filter>sources</Filter>
     </ClCompile>
   </ItemGroup>

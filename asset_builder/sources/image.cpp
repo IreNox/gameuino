@@ -1,11 +1,20 @@
-#include "image_writer.h"
+#include "image.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <third_party/stb_image.h>
 
 namespace tiki
 {
-	bool ImageWriter::loadImageFromFile( std::string fileName )
+	void Image::create( size_t width, size_t height )
+	{
+		m_imageWidth	= (size_t)width;
+		m_imageHeight	= (size_t)height;
+
+		const size_t imageSize = m_imageWidth * m_imageHeight * 4u;
+		m_imageData = std::vector< Pixel >( imageSize );
+	}
+
+	bool Image::loadImageFromFile( std::string fileName )
 	{
 		int x;
 		int y;
@@ -16,16 +25,23 @@ namespace tiki
 			return false;
 		}
 
+		if( comp != 4 )
+		{
+			stbi_image_free( pImage );
+			return false;
+		}
+
 		m_imageWidth	= (size_t)x;
 		m_imageHeight	= (size_t)y;
 
-		const size_t imageSize = x * y * comp;
-		m_imageData = std::vector< uint8_t >( pImage, pImage + imageSize - 1 );
+		const size_t imageSize = m_imageWidth * m_imageHeight;
+		const Pixel* pImagePixels = (const Pixel*)pImage;
+		m_imageData = std::vector< Pixel >( pImagePixels, pImagePixels + imageSize );
 		stbi_image_free( pImage );
 		return true;
 	}
 
-	void ImageWriter::writeImage( std::vector<uint8_t>& targetData, ImageFormat format )
+	void Image::writeImage( std::vector< uint8_t >& targetData, ImageFormat format )
 	{
 		switch( format )
 		{
@@ -50,19 +66,19 @@ namespace tiki
 		}
 	}
 
-	void ImageWriter::writeImageStencil( std::vector< uint8_t >& targetData )
+	void Image::writeImageStencil( std::vector< uint8_t >& targetData )
 	{
 		uint8_t currentBit = 0u;
 		uint8_t currentByte = 0u;
 		for( size_t y = 0u; y < m_imageHeight; ++y )
 		{
-			const uint8_t* pLineSource = &m_imageData[ y * m_imageWidth * 4u ];
+			const Pixel* pLineSource = &m_imageData[ y * m_imageWidth ];
 
 			for( size_t x = 0u; x < m_imageWidth; ++x )
 			{
-				const uint8_t* pPixelSource = &pLineSource[ x * 4u ];
+				const Pixel& pixelSource = pLineSource[ x ];
 
-				const uint8_t pixel = (pPixelSource[ 3u ] != 0u);
+				const uint8_t pixel = (pixelSource.a != 0u);
 				currentByte |= pixel << currentBit;
 
 				currentBit++;

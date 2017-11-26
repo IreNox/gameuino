@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cctype>
 #include <vector>
 
 namespace tiki
@@ -11,5 +12,31 @@ namespace tiki
 		{
 			targetData.push_back( pBytes[ i ] );
 		}
+	}
+
+	inline std::string getCamelCaseString( std::string input )
+	{
+		std::string output;
+
+		bool toUpper = true;
+		for( char c : input )
+		{
+			if( c == '_' || c == ' ' || c == '-' )
+			{
+				toUpper = true;
+				continue;
+			}
+
+			if( toUpper )
+			{
+				c = std::toupper( c );
+				toUpper = false;
+			}
+
+
+			output.push_back( c );
+		}
+
+		return output;
 	}
 }

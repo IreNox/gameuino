@@ -163,15 +163,14 @@
     <ClInclude Include="include\base.h" />
     <ClInclude Include="include\builder.h" />
     <ClInclude Include="include\font_builder.h" />
-    <ClInclude Include="include\image_writer.h" />
-    <ClInclude Include="third_party\crc_32.h" />
+    <ClInclude Include="include\image.h" />
     <ClInclude Include="third_party\json.hpp" />
     <ClInclude Include="third_party\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\asset_builder.cpp" />
     <ClCompile Include="sources\font_builder.cpp" />
-    <ClCompile Include="sources\image_writer.cpp" />
+    <ClCompile Include="sources\image.cpp" />
     <ClCompile Include="sources\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

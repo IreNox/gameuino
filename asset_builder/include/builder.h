@@ -22,8 +22,8 @@ namespace tiki
 		json					config;
 		std::string				type;
 
-		uint32_t				nameCrc;
 		std::vector< uint8_t >	data;
+		size_t					dataOffset;
 	};
 
 	class Builder

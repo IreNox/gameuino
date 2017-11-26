@@ -1,0 +1,9 @@
+{
+	"type": "font",
+	"parameters": {
+		"character_width": 4,
+		"character_height": 5,
+		"character_first": "0",
+		"character_last": "9"
+	}
+}

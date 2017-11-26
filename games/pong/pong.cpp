@@ -1,30 +1,42 @@
 #include "pong.h"
 
+#include "asset_data.h"
+
 namespace tiki
 {
 	void Pong::initialize()
 	{
 		Serial.begin( 9600 );
 
+		m_assets.initialize( s_assets, AssetName_Count );
+
 		m_input.initialize();
 
 		m_graphics.initialize();
 		m_graphics.fillScreen( 0x0000u );
 
-		m_humanPlayer.moveY			= 0;
-		m_humanPlayer.rect.pos.x	= Player1PosX;
-		m_humanPlayer.rect.pos.y	= 42u;
-		m_humanPlayer.rect.size.x	= 4;
-		m_humanPlayer.rect.size.y	= 16u;
-		m_humanPlayer.score			= 0u;
+		m_player1.moveY				= 0;
+		m_player1.rect.pos.x		= Player1PosX;
+		m_player1.rect.pos.y		= 42u;
+		m_player1.rect.size.x		= 4;
+		m_player1.rect.size.y		= 16u;
+		m_player1.score				= 0u;
+		m_player1.scoreRect.pos.x	= Player1ScorePosX;
+		m_player1.scoreRect.pos.y	= 12u;
+		m_player1.scoreRect.size.x	= 4u * 4u;
+		m_player1.scoreRect.size.y	= 5u * 4u;
 
-		m_aiPlayer.moveY			= 0;
-		m_aiPlayer.rect.pos.x		= Player2PosX;
-		m_aiPlayer.rect.pos.y		= 42u;
-		m_aiPlayer.rect.size.x		= 4;
-		m_aiPlayer.rect.size.y		= 16u;
-		m_aiPlayer.score			= 0u;
-
+		m_player2.moveY				= 0;
+		m_player2.rect.pos.x		= Player2PosX;
+		m_player2.rect.pos.y		= 42u;
+		m_player2.rect.size.x		= 4;
+		m_player2.rect.size.y		= 16u;
+		m_player2.score				= 0u;
+		m_player2.scoreRect.pos.x	= Player2ScorePosX;
+		m_player2.scoreRect.pos.y	= 12u;
+		m_player2.scoreRect.size.x	= 4u * 4u;
+		m_player2.scoreRect.size.y	= 5u * 4u;
+		
 		m_ballRect.pos.x			= 0u;
 		m_ballRect.pos.y			= 0u;
 		m_ballRect.size.x			= 4u;
@@ -35,8 +47,10 @@ namespace tiki
 		m_ballDirectionY			= 1;
 		
 		drawGame();
-		drawPlayer( m_humanPlayer.rect.pos.x, m_humanPlayer.rect.pos.y, m_humanPlayer.rect.pos.y );
-		drawPlayer( m_aiPlayer.rect.pos.x, m_aiPlayer.rect.pos.y, m_aiPlayer.rect.pos.y );
+		drawPlayer( m_player1.rect.pos.x, m_player1.rect.pos.y, m_player1.rect.pos.y );
+		drawPlayer( m_player2.rect.pos.x, m_player2.rect.pos.y, m_player2.rect.pos.y );
+		drawScore( m_player1.scoreRect.pos.x, m_player1.scoreRect.pos.y, m_player1.score, m_player1.score );
+		drawScore( m_player1.scoreRect.pos.x, m_player2.scoreRect.pos.y, m_player2.score, m_player2.score );
 	}
 
 	void Pong::loop()
@@ -65,15 +79,15 @@ namespace tiki
 	void Pong::updateHumanPlayer()
 	{
 		const sint32 stickState = m_input.getCurrentState().stickY;
-		updatePlayer( m_humanPlayer, stickState );
+		updatePlayer( m_player1, stickState );
 	}
 
 	void Pong::updateAiPlayer()
 	{
 		const sint32 ballCenterY = (m_ballRect.pos.y + 2);
-		const sint32 playerCenterY = (m_aiPlayer.rect.pos.y + 8);
+		const sint32 playerCenterY = (m_player2.rect.pos.y + 8);
 		const sint32 stickState = (playerCenterY - ballCenterY) * 64;
-		updatePlayer( m_aiPlayer, stickState );
+		updatePlayer( m_player2, stickState );
 	}
 
 	void Pong::updatePlayer( PlayerState& player, sint32 inputState )
@@ -136,6 +150,16 @@ namespace tiki
 
 			m_graphics.drawRectangle( pointRect, GraphicsColorWhite );
 		}
+
+		if( m_player1.scoreRect.intersect( oldRect ) )
+		{
+			drawScore( m_player1.scoreRect.pos.x, m_player1.scoreRect.pos.y, m_player1.score, m_player1.score );
+		}
+
+		if( m_player2.scoreRect.intersect( oldRect ) )
+		{
+			drawScore( m_player2.scoreRect.pos.x, m_player2.scoreRect.pos.y, m_player2.score, m_player2.score );
+		}
 	}
 
 	void Pong::checkPlayerPos( PlayerState& player )
@@ -169,25 +193,27 @@ namespace tiki
 		{
 			m_ballRect.pos.x = 4u;
 
-			m_aiPlayer.score++;			
+			const uint8 oldScore = m_player2.score;
+			m_player2.score++;			
 			m_ballSpeedX		= 0u;
 			m_ballDirectionX	= -1;
 
-			drawScore( 0, 0, 0, 0 );
+			drawScore( Player2ScorePosX, 12, m_player2.score, oldScore );
 		}
 		else if( m_ballRect.pos.x > 38u * 4u )
 		{
 			m_ballRect.pos.x = 38u * 4u;
 
-			m_humanPlayer.score++;
+			const uint8 oldScore = m_player1.score;
+			m_player1.score++;
 			m_ballSpeedX		= 0u;
 			m_ballDirectionX	= 1;
 
-			drawScore( 0, 0, 0, 0 );
+			drawScore( Player1ScorePosX, 12, m_player1.score, oldScore );
 		}
 
-		checkBallPlayerPos( m_humanPlayer );
-		checkBallPlayerPos( m_aiPlayer );
+		checkBallPlayerPos( m_player1 );
+		checkBallPlayerPos( m_player2 );
 	}
 
 	void Pong::checkBallPlayerPos( PlayerState& player )
@@ -260,8 +286,59 @@ namespace tiki
 		m_graphics.drawRectangle( posX, posY, 4, 4, GraphicsColorWhite );
 	}
 
-	void Pong::drawScore( uint8 posX, uint8 posY, uint8 oldScore, uint8 newScore )
+	void Pong::drawScore( uint8 posX, uint8 posY, uint8 score, uint8 oldScore )
 	{
+		const void* pFont = m_assets.getAsset( AssetName_FontNumbers );
+		/*const GraphicsFont& font = *(const GraphicsFont*)pFont;
 
+		Serial.println( font.characterWidth );
+		Serial.println( font.characterHeight );
+		Serial.println( font.firstCharacter );
+		Serial.println( font.lastCharacter );
+		
+		const uint16 charCount = font.lastCharacter - font.firstCharacter;
+		const uint16 charSize = font.characterWidth * font.characterHeight;
+		const uint16 lengthBits = charCount * charSize;
+		const uint16 lengthBytes = lengthBits / 8u;
+
+		Serial.println( lengthBits );
+		
+		const uint8* pSource = font.imageData;
+		uint8 bit = 0u;
+		uint8 x = 0u;
+		uint8 y = 0u;
+		for( uint16 i = 0u; i < lengthBits; ++i )
+		{
+			const uint8 isSet = ((*pSource) >> bit) & 1u;
+
+			bit++;
+			if( bit == 8u )
+			{
+				pSource++;
+				bit = 0u;
+			}
+
+			if( isSet )
+			{
+				m_graphics.drawPixel( x, y, GraphicsColorWhite );
+			}
+
+			x++;
+			if( x == charSize )
+			{
+				x = 0u;
+				y++;
+			}
+		}*/
+
+		char buffer[ 8u ];
+		if( score != oldScore )
+		{
+			sprintf( buffer, "%d", oldScore );
+			m_graphics.drawText( posX, posY, pFont, buffer, GraphicsColorBlack, 4 );
+		}
+
+		sprintf( buffer, "%d", score );
+		m_graphics.drawText( posX, posY, pFont, buffer, GraphicsColorWhite, 4 );
 	}
 }

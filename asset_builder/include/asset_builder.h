@@ -10,7 +10,7 @@ namespace tiki
 
 											AssetBuilder();
 
-		bool								buildProject( std::string projectJsonFile, std::string outputFile );
+		bool								buildProject( std::string projectJsonFile, std::string outputPath );
 
 	private:
 
@@ -23,7 +23,8 @@ namespace tiki
 		bool								loadAssets( std::string projectJsonFile );
 		bool								buildAssets();
 		void								writeAssets();
-		bool								writeCppHeader( std::string outputFile );
+		bool								writeNameHeader( std::string outputPath );
+		bool								writeDataHeader( std::string outputPath );
 
 		void								writeBytes( const void* pData, size_t length );
 	};

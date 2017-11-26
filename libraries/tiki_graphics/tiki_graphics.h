@@ -16,6 +16,15 @@ namespace tiki
 		GraphicsColorWhite		= 0xffffu,
 	};
 
+	struct GraphicsFont
+	{
+		uint8	characterWidth;
+		uint8	characterHeight;
+		char	firstCharacter;
+		char	lastCharacter;
+		uint8	imageData[ 0u ];
+	};
+
 	class Graphics
 	{
 	public:
@@ -27,15 +36,17 @@ namespace tiki
 		ST7735&	getTft() { return m_tft; }
 
 		void	fillScreen( uint16_t color );
-		void	drawPixel( uint8_t x, uint8_t y, uint16_t color );
-		void	drawLine( uint8_t x, uint8_t y, uint16_t color );
+		void	drawPixel( uint8 x, uint8 y, uint16_t color );
+		void	drawLine( uint8 x, uint8 y, uint16_t color );
 		void	drawRectangle( const Rectangle& rect, uint16_t color );
-		void	drawRectangle( uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint16_t color );
+		void	drawRectangle( uint8 x, uint8 y, uint8 width, uint8 height, uint16_t color );
+		void	drawText( uint8 x, uint8 y, const void* pFont, const char* pText, uint16_t color, uint8 size = 1 );
+		void	drawChar( uint8 x, uint8 y, const void* pFont, char c, uint16_t color, uint8 size = 1 );
 		
 	private:
 
 		ST7735	m_tft;
 
-		void	transformCoordinates( uint8_t* pX, uint8_t* pY );
+		void	transformCoordinates( uint8* pX, uint8* pY );
 	};
 }
