@@ -33,7 +33,5 @@ void loop()
 			tft.drawString(0, 0, "Test", color );
 		}
 	}
-
-	delay( 5 );
 }
 
