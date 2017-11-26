@@ -3,7 +3,7 @@
         {
             "name": "Arduino",
             "includePath": [
-				"../../libraries/ST7735",
+				"../../libraries/TFT_ST7735",
                 "../../libraries/tiki_assets",
                 "../../libraries/tiki_core",
                 "../../libraries/tiki_graphics",

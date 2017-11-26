@@ -17,10 +17,9 @@ namespace tiki
 
 	bool FontBuilder::buildAsset( std::vector< uint8_t >& targetData, const Asset& asset )
 	{
-		const json parameters = asset.config[ "parameters" ];
-
-		const std::string firstCharacter = parameters[ "character_first" ];
-		const std::string lastCharacter = parameters[ "character_last" ];
+		const json parameters				= asset.config[ "parameters" ];
+		const std::string firstCharacter	= parameters[ "character_first" ];
+		const std::string lastCharacter		= parameters[ "character_last" ];
 
 		FontHeader header;
 		header.characterWidth	= parameters[ "character_width" ];

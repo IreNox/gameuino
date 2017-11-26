@@ -9,9 +9,10 @@ namespace tiki
 	{
 		ImageFormat_Stencil,
 		ImageFormat_Monochrome,
-		ImageFormat_RGB444,
-		ImageFormat_RGB565,
-		ImageFormat_RGB666,
+		ImageFormat_Rgb444,
+		ImageFormat_Rgb565,
+		ImageFormat_Rgb666,
+		ImageFormat_Rgba5551,
 	};
 
 	struct Pixel
@@ -42,5 +43,6 @@ namespace tiki
 		std::vector< Pixel >	m_imageData;
 
 		void					writeImageStencil( std::vector< uint8_t >& targetData );
+		void					writeImageRgb565( std::vector< uint8_t >& targetData );
 	};
 }

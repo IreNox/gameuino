@@ -15,8 +15,8 @@ namespace tiki
 
 	void Graphics::initialize()
 	{
-		m_tft.initR();
-		m_tft.writecommand( ST7735_DISPON );
+		m_tft.begin();
+		m_tft.setRotation( 1 );
 	}
 	
 	void Graphics::fillScreen( uint16_t color )
@@ -26,7 +26,6 @@ namespace tiki
 	
 	void Graphics::drawPixel( uint8 x, uint8 y, uint16_t color )
 	{
-		transformCoordinates( &x, &y );
 		m_tft.drawPixel( x, y, color );
 	}
 
@@ -42,10 +41,32 @@ namespace tiki
 
 	void Graphics::drawRectangle( uint8 x, uint8 y, uint8 width, uint8 height, uint16_t color )
 	{
-		transformCoordinates( &x, &y );
-		y -= width;
-
 		m_tft.fillRect( x, y, height, width, color );
+	}
+
+	void Graphics::drawImage( uint8 x, uint8 y, const void* pImage )
+	{
+		const GraphicsImage& image = *(const GraphicsImage*)pImage;
+
+		tPicture pic;
+		pic.data			= image.imageData;
+		pic.image_width		= image.width;
+		pic.image_height	= image.height;
+		pic.image_datalen	= image.width * image.height;
+		pic.image_depth		= 16u;
+		pic.image_comp		= RLE_no;
+
+		m_tft.drawImage( x, y, &pic );
+
+		const uint16* pSource = image.imageData;
+		for( uint8 imageY = 0u; imageY < image.height; ++imageY )
+		{
+			for( uint8 imageX = 0u; imageX < image.width; ++imageX )
+			{
+				drawPixel( x + imageX, y + imageY, *pSource );
+				pSource++;
+			}
+		}
 	}
 
 	void Graphics::drawText( uint8 x, uint8 y, const void* pFont, const char* pText, uint16_t color, uint8 size /*= 1*/ )
@@ -105,12 +126,5 @@ namespace tiki
 				}
 			}
 		}
-	}
-
-	void Graphics::transformCoordinates( uint8* pX, uint8* pY )
-	{
-		const uint8 x = *pX;
-		*pX = *pY;
-		*pY = ST7735::height - x;
 	}
 }

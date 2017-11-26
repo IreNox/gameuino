@@ -3,7 +3,7 @@
         {
             "name": "Arduino",
             "includePath": [
-				"ST7735",
+				"TFT_ST7735",
 				"tiki_core",
                 "E:\\Misc\\arduino-1.8.5\\hardware\\arduino\\avr\\cores\\arduino",
                 "E:\\Misc\\arduino-1.8.5\\hardware\\tools\\avr\\avr\\include",

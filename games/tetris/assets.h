@@ -6,7 +6,8 @@ namespace tiki
 {
 	enum AssetName : uint8
 	{
-		AssetName_FontNumbers, 
+		AssetName_Font, 
+		AssetName_Blocks, 
 
 		AssetName_Count
 	};

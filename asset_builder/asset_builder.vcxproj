@@ -164,6 +164,7 @@
     <ClInclude Include="include\builder.h" />
     <ClInclude Include="include\font_builder.h" />
     <ClInclude Include="include\image.h" />
+    <ClInclude Include="include\image_builder.h" />
     <ClInclude Include="third_party\json.hpp" />
     <ClInclude Include="third_party\stb_image.h" />
   </ItemGroup>
@@ -171,6 +172,7 @@
     <ClCompile Include="sources\asset_builder.cpp" />
     <ClCompile Include="sources\font_builder.cpp" />
     <ClCompile Include="sources\image.cpp" />
+    <ClCompile Include="sources\image_builder.cpp" />
     <ClCompile Include="sources\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

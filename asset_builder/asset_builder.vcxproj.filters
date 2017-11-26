@@ -34,6 +34,9 @@
     <ClInclude Include="include\image.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\image_builder.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\asset_builder.cpp">
@@ -46,6 +49,9 @@
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="sources\image.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\image_builder.cpp">
       <Filter>sources</Filter>
     </ClCompile>
   </ItemGroup>

@@ -13,7 +13,10 @@ namespace tiki
 		m_input.initialize();
 
 		m_graphics.initialize();
-		m_graphics.fillScreen( 0x0000u );
+		m_graphics.fillScreen( GraphicsColorBlack );
+
+		const void* pImage = m_assets.getAsset( AssetName_Blocks );
+		m_graphics.drawImage( 5, 5, pImage );
 	}
 
 	void Tetris::loop()
@@ -22,6 +25,9 @@ namespace tiki
 
 		m_input.update();
 
+		const void* pImage = m_assets.getAsset( AssetName_Blocks );
+		m_graphics.drawImage( 5, 15, pImage );
+		
 		const int frameEndTime = millis();
 		const int elapsedTime = frameEndTime - frameStartTime;
 		Serial.println( elapsedTime );

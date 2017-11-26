@@ -1,5 +1,7 @@
 #include "image.h"
 
+#include "base.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <third_party/stb_image.h>
 
@@ -25,7 +27,7 @@ namespace tiki
 			return false;
 		}
 
-		if( comp != 4 )
+		if( comp < 3 )
 		{
 			stbi_image_free( pImage );
 			return false;
@@ -52,13 +54,14 @@ namespace tiki
 		case ImageFormat_Monochrome:
 			break;
 
-		case ImageFormat_RGB444:
+		case ImageFormat_Rgb444:
 			break;
 
-		case ImageFormat_RGB565:
+		case ImageFormat_Rgb565:
+			writeImageRgb565( targetData );
 			break;
 
-		case ImageFormat_RGB666:
+		case ImageFormat_Rgb666:
 			break;
 
 		default:
@@ -76,9 +79,9 @@ namespace tiki
 
 			for( size_t x = 0u; x < m_imageWidth; ++x )
 			{
-				const Pixel& pixelSource = pLineSource[ x ];
+				const Pixel& sourcePixel = pLineSource[ x ];
 
-				const uint8_t pixel = (pixelSource.a != 0u);
+				const uint8_t pixel = (sourcePixel.a != 0u);
 				currentByte |= pixel << currentBit;
 
 				currentBit++;
@@ -88,6 +91,30 @@ namespace tiki
 					currentBit	= 0u;
 					currentByte	= 0u;
 				}
+			}
+		}
+	}
+
+	void Image::writeImageRgb565( std::vector< uint8_t >& targetData )
+	{
+		for( size_t y = 0u; y < m_imageHeight; ++y )
+		{
+			const Pixel* pLineSource = &m_imageData[ y * m_imageWidth ];
+
+			for( size_t x = 0u; x < m_imageWidth; ++x )
+			{
+				const Pixel& sourcePixel = pLineSource[ x ];
+
+				const uint16_t r = sourcePixel.r;
+				const uint16_t g = sourcePixel.g;
+				const uint16_t b = sourcePixel.b;
+
+				const uint16_t r5 = ((r >> 3) & 0x1f) << 11;
+				const uint16_t g6 = ((g >> 2) & 0x3f) << 5;
+				const uint16_t b5 = ((b >> 3) & 0x1f);
+				const uint16_t c = r5 | g6 | b5;
+
+				writeBytes( targetData, &c, sizeof( c ) );
 			}
 		}
 	}
