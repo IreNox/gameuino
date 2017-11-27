@@ -2,8 +2,8 @@
 
 #include "tiki_core.h"
 
-#include <Arduino.h>
 #include <TFT_ST7735.h>
+#include <tiki_st7735.h>
 
 namespace tiki
 {

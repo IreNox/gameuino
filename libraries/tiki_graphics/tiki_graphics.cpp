@@ -2,12 +2,6 @@
 
 namespace tiki
 {
-	static const uint8 s_displayCs		= 53u;
-	static const uint8 s_displayDc		= 9u;
-	//static const uint8 s_displayMosi	= 51u;
-	//static const uint8 s_displaySclk	= 52u;
-	static const uint8 s_displayRst		= 8u;  // you can also connect this to the Arduino reset
-
 	Graphics::Graphics()
 		: m_tft( s_displayCs, s_displayDc, s_displayRst ) // s_displayCs, s_displayDc, s_displayMosi, s_displaySclk, s_displayRst
 	{
