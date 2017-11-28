@@ -10,9 +10,6 @@ void setup()
 {
 	graphics.initialize();
 	graphics.fillScreen( 0x0000u );
-
-	//tiki::GraphicsTft& tft = graphics.getTft();
-	//widtft.drawString(0, 0, "Test", color );
 }
 
 void loop()
@@ -27,10 +24,9 @@ void loop()
 		if( y > tiki::GraphicsScreenHeight )
 		{
 			y = 0;
-			color = (color == 0x0000u ? 0xffff : 0x0000);
+			color = (color == 0x00ffu ? 0xff00 : 0x00ff);
 
-			//tiki::GraphicsTft& tft = graphics.getTft();
-			//tft.drawString(0, 0, "Test", color );
+			graphics.drawRectangle( 50u, 50u, 50u, 50u, color );
 		}
 	}
 }

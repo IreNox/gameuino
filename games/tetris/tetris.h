@@ -20,9 +20,11 @@ namespace tiki
 			CellsInWidth	= 10,
 			CellsInHeight	= 22
 		};
-		
+
 		Assets		m_assets;
         Input		m_input;
 		Graphics	m_graphics;
+
+		Color test[ 16 *17 ];
     };
 }

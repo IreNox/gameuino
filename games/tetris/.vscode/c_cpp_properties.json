@@ -3,12 +3,12 @@
         {
             "name": "Arduino",
             "includePath": [
-				"../../libraries/TFT_ST7735",
                 "../../libraries/tiki_assets",
                 "../../libraries/tiki_core",
                 "../../libraries/tiki_graphics",
                 "../../libraries/tiki_input",
                 "../../libraries/tiki_save",
+				"../../libraries/tiki_st7735",
                 "E:\\Misc\\arduino-1.8.5\\hardware\\arduino\\avr\\cores\\arduino",
                 "E:\\Misc\\arduino-1.8.5\\hardware\\tools\\avr\\avr\\include",
                 "E:\\Misc\\arduino-1.8.5\\hardware\\tools\\avr\\lib\\gcc\\avr\\4.9.2\\include",

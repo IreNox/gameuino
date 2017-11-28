@@ -3,29 +3,22 @@
 namespace tiki
 {
 	Graphics::Graphics()
-		: m_tft( s_displayCs, s_displayDc, s_displayRst ) // s_displayCs, s_displayDc, s_displayMosi, s_displaySclk, s_displayRst
 	{
 	}
 
 	void Graphics::initialize()
 	{
-		m_tft.begin();
-		m_tft.setRotation( 1 );
+		m_tft.initialize();
 	}
-	
+
 	void Graphics::fillScreen( uint16_t color )
 	{
 		m_tft.fillScreen( color );
 	}
-	
+
 	void Graphics::drawPixel( uint8 x, uint8 y, uint16_t color )
 	{
 		m_tft.drawPixel( x, y, color );
-	}
-
-	void Graphics::drawLine( uint8 x, uint8 y, uint16_t color )
-	{
-
 	}
 
 	void Graphics::drawRectangle( const Rectangle& rect, uint16_t color )
@@ -35,32 +28,27 @@ namespace tiki
 
 	void Graphics::drawRectangle( uint8 x, uint8 y, uint8 width, uint8 height, uint16_t color )
 	{
-		m_tft.fillRect( x, y, height, width, color );
+		m_tft.drawRectangle( x, y, width, height, color );
 	}
 
-	void Graphics::drawImage( uint8 x, uint8 y, const void* pImage )
+	void Graphics::drawImage( uint8 x, uint8 y, const uint8* pImage )
 	{
-		const GraphicsImage& image = *(const GraphicsImage*)pImage;
+		const GraphicsImage* pGraphicsImage = (const GraphicsImage*)pImage;
+		m_tft.drawImage( x, y, pGraphicsImage->width, pGraphicsImage->height, (const Color*)&pGraphicsImage[ 1u ] );
+	}
 
-		tPicture pic;
-		pic.data			= image.imageData;
-		pic.image_width		= image.width;
-		pic.image_height	= image.height;
-		pic.image_datalen	= image.width * image.height;
-		pic.image_depth		= 16u;
-		pic.image_comp		= RLE_no;
+	void Graphics::drawImageProgramMemory( uint8 x, uint8 y, const uint8* pImage )
+	{
+		const uint16 imageValues = pgm_read_word( pImage );
+		const uint8 width = imageValues;
+		const uint8 height = imageValues >> 8u;
 
-		m_tft.drawImage( x, y, &pic );
+		m_tft.drawImageProgramMemory( x, y, width, height, (const Color*)(pImage + 3u) );
+	}
 
-		const uint16* pSource = image.imageData;
-		for( uint8 imageY = 0u; imageY < image.height; ++imageY )
-		{
-			for( uint8 imageX = 0u; imageX < image.width; ++imageX )
-			{
-				drawPixel( x + imageX, y + imageY, *pSource );
-				pSource++;
-			}
-		}
+	void Graphics::drawTexture( uint8 x, uint8 y, uint8 width, uint8 height, const Color* pPixels )
+	{
+		m_tft.drawImage( x, y, width, height, pPixels );
 	}
 
 	void Graphics::drawText( uint8 x, uint8 y, const void* pFont, const char* pText, uint16_t color, uint8 size /*= 1*/ )
@@ -96,7 +84,7 @@ namespace tiki
 		const uint8 charIndex = c - font.firstCharacter;
 		const uint16 charBitOffset = charIndex * charBitSize;
 
-		const uint8* pCharSource = font.imageData + (charBitOffset / 8);		
+		const uint8* pCharSource = font.imageData + (charBitOffset / 8);
 		uint8 charBit = charBitOffset % 8u;
 
 		for( uint8 charY = 0u; charY < font.characterHeight; ++charY )

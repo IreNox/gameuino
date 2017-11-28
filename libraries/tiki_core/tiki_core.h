@@ -42,6 +42,12 @@ namespace tiki
 	typedef Pio				rtype;
 #endif
 
+	struct Asset
+	{
+		const uint8*	pData;
+		uint16			dataSize;
+	};
+
 	struct uint28
 	{
 		uint8	x;
@@ -65,11 +71,10 @@ namespace tiki
 
 		bool intersect( const Rectangle& rect )
 		{
-			return !(rect.pos.x > pos.x + size.x || 
-				   rect.pos.x + rect.size.x < pos.x || 
+			return !(rect.pos.x > pos.x + size.x ||
+				   rect.pos.x + rect.size.x < pos.x ||
 				   rect.pos.y > pos.y + size.y ||
 				   rect.pos.y + rect.size.y < pos.y);
-
 		}
 	};
 }

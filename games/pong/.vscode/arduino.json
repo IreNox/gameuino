@@ -2,5 +2,6 @@
     "sketch": "pong.ino",
     "board": "arduino:avr:mega",
     "configuration": "cpu=atmega2560",
-    "port": "COM3"
+	"port": "COM3",
+	"output": "build"
 }

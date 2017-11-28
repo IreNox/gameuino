@@ -5,9 +5,11 @@
             "includePath": [
 				"TFT_ST7735",
 				"tiki_core",
+				"tiki_st7735",
                 "E:\\Misc\\arduino-1.8.5\\hardware\\arduino\\avr\\cores\\arduino",
                 "E:\\Misc\\arduino-1.8.5\\hardware\\tools\\avr\\avr\\include",
-                "E:\\Misc\\arduino-1.8.5\\hardware\\tools\\avr\\lib\\gcc\\avr\\4.9.2\\include",
+				"E:\\Misc\\arduino-1.8.5\\hardware\\tools\\avr\\lib\\gcc\\avr\\4.9.2\\include",
+				"E:\\Misc\\arduino-1.8.5\\hardware\\tools\\avr\\lib\\gcc\\avr\\4.9.2\\include-fixed",
 				"E:\\Misc\\arduino-1.8.5\\hardware\\arduino\\avr\\variants\\mega",
 				"E:\\Misc\\arduino-1.8.5\\hardware\\arduino\\avr\\libraries\\SPI\\src"
             ],
