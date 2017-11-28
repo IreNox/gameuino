@@ -7,6 +7,7 @@
                 "../../libraries/tiki_core",
                 "../../libraries/tiki_graphics",
                 "../../libraries/tiki_input",
+                "../../libraries/tiki_renderer",
                 "../../libraries/tiki_save",
 				"../../libraries/tiki_st7735",
                 "E:\\Misc\\arduino-1.8.5\\hardware\\arduino\\avr\\cores\\arduino",

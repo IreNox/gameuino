@@ -8,6 +8,8 @@
 #define TIKI_ENABLED( value )	( ( 0 + value ) == 2 )
 #define TIKI_DISABLED( value )	( ( 0 + value ) != 2 )
 
+#define TIKI_DEBUG				TIKI_ON
+
 #define TIKI_FORCE_INLINE		__attribute__((always_inline))
 #define TIKI_PROGRAM_MEMORY		PROGMEM
 
@@ -21,6 +23,12 @@
 #	define TIKI_ARM_DUE			TIKI_ON
 #else
 #	define TIKI_ARM_DUE			TIKI_OFF
+#endif
+
+#if TIKI_ENABLED( TIKI_DEBUG )
+#	define TIKI_TRACE( ... )	Serial.println( __VA_ARGS__ )
+#else
+#	define TIKI_TRACE( ... )
 #endif
 
 namespace tiki

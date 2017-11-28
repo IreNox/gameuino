@@ -3,6 +3,7 @@
 #include "tiki_assets.h"
 #include "tiki_input.h"
 #include "tiki_graphics.h"
+#include "tiki_renderer.h"
 
 namespace tiki
 {
@@ -24,7 +25,6 @@ namespace tiki
 		Assets		m_assets;
         Input		m_input;
 		Graphics	m_graphics;
-
-		Color test[ 16 *17 ];
+		Renderer	m_renderer;
     };
 }
