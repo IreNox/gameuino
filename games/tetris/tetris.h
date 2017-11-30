@@ -22,9 +22,14 @@ namespace tiki
 			CellsInHeight	= 22
 		};
 
+		void*		m_pSprite3;
+
 		Assets		m_assets;
         Input		m_input;
 		Graphics	m_graphics;
 		Renderer	m_renderer;
+
+		void*		m_pSprite1;
+		void*		m_pSprite2;
     };
 }

@@ -21,6 +21,7 @@ namespace tiki
 		uint8	width;
 		uint8	height;
 		uint8	format;
+		uint8	imageData[ 0u ];
 	};
 
 	struct GraphicsFont
@@ -54,8 +55,6 @@ namespace tiki
 
 	private:
 
-		GraphicsTft	m_tft;
-
-		void		transformCoordinates( uint8* pX, uint8* pY );
+		GraphicsTft		m_tft;
 	};
 }

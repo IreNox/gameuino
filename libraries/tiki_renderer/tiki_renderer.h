@@ -43,7 +43,7 @@ namespace tiki
 			TilesInWidth		= GraphicsScreenWidth / TileSize,
 			TilesInHeight		= GraphicsScreenHeight / TileSize,
 			TileCount			= TilesInWidth * TilesInHeight,
-			ChangedTilesBytes	= TileCount / 8u,
+			TilesBytes			= TileCount / 8u,
 			PixelsPerTile		= TileSize * TileSize,
 			StencilBytesPerTile	= PixelsPerTile / 8u
 		};
@@ -58,7 +58,7 @@ namespace tiki
 		struct Sprite
 		{
 			RendererSpriteType	type;
-			Rectangle			rect;
+			BoundingRectangle	rect;
 			SpriteData			data;
 		};
 
@@ -66,13 +66,20 @@ namespace tiki
 
 		Sprite		m_sprites[ MaxSpriteCount ];
 
-		uint8		m_changedTiles[ ChangedTilesBytes ];
+		uint8		m_dirtyTiles[ TilesBytes ];
 
-		Color		m_pixels[ PixelsPerTile ];
+		Color		m_pixels[ TileSize ][ TileSize ];
 		uint8		m_stencil[ StencilBytesPerTile ];
 
 		Sprite*		findFreeSprite( bool inFront );
+		Sprite*		addSprite( RendererSpriteType type, const Rectangle& rect, bool inFront );
+
+		void		invalidateTiles( const BoundingRectangle& rect );
 
 		void		renderTile( uint16 tileIndex );
+		void		renderTileSolidColor( const Sprite& sprite, const BoundingRectangle& tileRect );
+		void		renderTileSolidImage( const Sprite& sprite, const BoundingRectangle& tileRect );
+		void		renderTileTransparentImage( const Sprite& sprite, const BoundingRectangle& tileRect );
+		void		renderTileText( const Sprite& sprite, const BoundingRectangle& tileRect );
 	};
 }

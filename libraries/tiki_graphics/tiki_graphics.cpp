@@ -34,7 +34,7 @@ namespace tiki
 	void Graphics::drawImage( uint8 x, uint8 y, const uint8* pImage )
 	{
 		const GraphicsImage* pGraphicsImage = (const GraphicsImage*)pImage;
-		m_tft.drawImage( x, y, pGraphicsImage->width, pGraphicsImage->height, (const Color*)&pGraphicsImage[ 1u ] );
+		m_tft.drawImage( x, y, pGraphicsImage->width, pGraphicsImage->height, (const Color*)pGraphicsImage->imageData );
 	}
 
 	void Graphics::drawImageProgramMemory( uint8 x, uint8 y, const uint8* pImage )

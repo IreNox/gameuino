@@ -27,8 +27,10 @@
 
 #if TIKI_ENABLED( TIKI_DEBUG )
 #	define TIKI_TRACE( ... )	Serial.println( __VA_ARGS__ )
+#	define TIKI_ASSERT( exp )	if( !(exp) ) Serial.println( #exp )
 #else
 #	define TIKI_TRACE( ... )
+#	define TIKI_ASSERT( exp )
 #endif
 
 namespace tiki
@@ -56,20 +58,32 @@ namespace tiki
 		uint16			dataSize;
 	};
 
-	struct uint28
+	struct uint8x2
 	{
 		uint8	x;
 		uint8	y;
 	};
 
-	typedef uint28 Point;
+	typedef uint8x2 Point;
 
 	struct Rectangle
 	{
-		uint28	pos;
-		uint28	size;
+		uint8x2	pos;
+		uint8x2	size;
 
-		bool contains( const Point& point )
+		Rectangle()
+		{
+		}
+
+		Rectangle( uint8 x, uint8 y, uint8 width, uint8 height )
+		{
+			pos.x	= x;
+			pos.y	= y;
+			size.x	= width;
+			size.y	= height;
+		}
+
+		bool contains( const Point& point ) const
 		{
 			return point.x >= pos.x &&
 				   point.y >= pos.y &&
@@ -77,12 +91,32 @@ namespace tiki
 				   point.y < pos.y + size.y;
 		}
 
-		bool intersect( const Rectangle& rect )
+		bool intersect( const Rectangle& rect ) const
 		{
 			return !(rect.pos.x > pos.x + size.x ||
 				   rect.pos.x + rect.size.x < pos.x ||
 				   rect.pos.y > pos.y + size.y ||
 				   rect.pos.y + rect.size.y < pos.y);
 		}
+
+		template<typename T>
+		TIKI_FORCE_INLINE bool isPowerOfTwo( T x )
+		{
+			return ( x & ( x - 1 ) ) == 0;
+		}
+
+		template<typename T>
+		TIKI_FORCE_INLINE T alignValue( T value, T alignment )
+		{
+			//TIKI_ASSERT( alignment > 0 );
+			//TIKI_ASSERT( isPowerOfTwo( alignment ) );
+			return ( value + alignment - 1 ) & ( 0 - alignment );
+		}
+	};
+
+	struct BoundingRectangle
+	{
+		uint8x2	min;
+		uint8x2	max;
 	};
 }

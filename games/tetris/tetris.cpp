@@ -15,21 +15,39 @@ namespace tiki
 		m_graphics.initialize();
 		m_graphics.fillScreen( GraphicsColorBlack );
 
-		const void* pImage = m_assets.loadAsset( AssetName_Blocks );
-		m_graphics.drawImage( 5, 5, pImage );
+		m_renderer.initialize( &m_graphics );
+
+		const uint8* pImage = m_assets.loadAsset( AssetName_Blocks );
+
+		m_pSprite1 = m_renderer.addSolidColorSprite( Rectangle( 5, 5, 20, 20 ), 0x008f );
+		//m_pSprite2 = m_renderer.addSolidImageSprite( Rectangle( 50, 50, 20, 5 ), pImage );
+		m_pSprite3 = m_pSprite1;
+
+		//m_graphics.drawImage( 5, 5, pImage );
 	}
 
 	void Tetris::loop()
 	{
-		const int frameStartTime = millis();
+		static uint8 y = 10u;
+		const long frameStartTime = millis();
 
 		m_input.update();
 
-		const uint8* pImage = m_assets.getAsset( AssetName_Blocks );
-		m_graphics.drawImageProgramMemory( 5, 15, pImage );
+		const Point pos = { y, y };
+		m_renderer.moveSprite( m_pSprite1, pos );
+		y += 5u;
+		if( y == 100u )
+		{
+			y = 5u;
+		}
 
-		const int frameEndTime = millis();
-		const int elapsedTime = frameEndTime - frameStartTime;
+		m_renderer.render();
+
+		//const uint8* pImage = m_assets.getAsset( AssetName_Blocks );
+		//m_graphics.drawImageProgramMemory( 5, 15, pImage );
+
+		const long frameEndTime = millis();
+		const long elapsedTime = frameEndTime - frameStartTime;
 		Serial.println( elapsedTime );
 		if( elapsedTime < 16 )
 		{
