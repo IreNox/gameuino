@@ -45,7 +45,7 @@ namespace tiki
 	private:
 
 		rtype*					m_pCsPort;
-		rtype*					m_pRsPort;
+		rtype*					m_pDcPort;
 		ruint					m_csPinMask;
 		ruint					m_dcPinMask;
 

@@ -38,7 +38,7 @@ namespace tiki
 		enum
 		{
 			MaxSpriteCount		= 32u,
-			TileSize 			= 16u,
+			TileSize 			= 8u,
 
 			TilesInWidth		= GraphicsScreenWidth / TileSize,
 			TilesInHeight		= GraphicsScreenHeight / TileSize,

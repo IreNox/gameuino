@@ -185,8 +185,8 @@ namespace tiki
 		{
 			for( uint8 x = firstTileX; x <= lastTileX; ++x )
 			{
-				const uint8 bitIndex = (y * TilesInWidth) + x;
-				const uint8 byteIndex = bitIndex / 8u;
+				const uint16 bitIndex	= (y * TilesInWidth) + x;
+				const uint8 byteIndex	= bitIndex / 8u;
 				const uint8 byteBit		= bitIndex % 8u;
 
 				//Serial.print( "d: " );

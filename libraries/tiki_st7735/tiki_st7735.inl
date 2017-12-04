@@ -1,5 +1,7 @@
 #pragma once
 
+#include <SPI.h>
+
 namespace tiki
 {
 	// ST7735 commands
@@ -66,11 +68,15 @@ namespace tiki
 	static const uint8 TFT_POSITIV_GAMMASET[ 15u ]	= { 0x0F, 0x31, 0x2B, 0x0C, 0x0E, 0x08, 0x4E, 0xF1, 0x37, 0x07, 0x10, 0x03, 0x0E, 0x09, 0x00 };
 	static const uint8 TFT_NEGATIV_GAMMASET[ 15u ]	= { 0x00, 0x0E, 0x14, 0x07, 0x11, 0x07, 0x31, 0xC1, 0x48, 0x08, 0x0F, 0x0C, 0x31, 0x36, 0x0F };
 
+	// SPI Settings
+	static const uint32 TFT_ST7735_SPI_SPEED 		= 8000000;
+	static const SPISettings TFT_ST7735_SPI			= SPISettings( TFT_ST7735_SPI_SPEED, MSBFIRST, SPI_MODE0 );
+
 	void TIKI_FORCE_INLINE ST7735::spiWrite8( uint8 data )
 	{
 #if TIKI_ENABLED( TIKI_AVR )
-		SPDR = data;				//load your outgoing data into the SPI shift reg's data register
-		while( !(SPSR & _BV(SPIF)) );	//wait for the data to be transmitted on MOSI
+		SPDR = data;					// load your outgoing data into the SPI shift reg's data register
+		while( !(SPSR & _BV(SPIF)) );	// wait for the data to be transmitted on MOSI
 #elif TIKI_ENABLED( TIKI_ARM_DUE )
 		SPI.transfer( data );
 #endif
@@ -89,25 +95,25 @@ namespace tiki
 	TIKI_FORCE_INLINE void ST7735::enableCommandStream()
 	{
 #if TIKI_ENABLED( TIKI_AVR )
-		*m_pRsPort &= ~m_dcPinMask;	// low
+		*m_pDcPort &= ~m_dcPinMask;	// low
 #elif TIKI_ENABLED( TIKI_ARM_DUE )
-		m_pRsPort->PIO_CODR |= m_dcPinMask; // low
+		m_pDcPort->PIO_CODR |= m_dcPinMask; // low
 #endif
 	}
 
 	TIKI_FORCE_INLINE void ST7735::enableDataStream()
 	{
 #if TIKI_ENABLED( TIKI_AVR )
-		*m_pRsPort |= m_dcPinMask; // high
+		*m_pDcPort |= m_dcPinMask; // high
 #elif TIKI_ENABLED( TIKI_ARM_DUE )
-		m_pRsPort->PIO_SODR |= m_dcPinMask; // high
+		m_pDcPort->PIO_SODR |= m_dcPinMask; // high
 #endif
 	}
 
 	TIKI_FORCE_INLINE void ST7735::startTransaction()
 	{
 #if defined( SPI_HAS_TRANSACTION )
-		SPI.beginTransaction( _ST7735SPI );
+		SPI.beginTransaction( TFT_ST7735_SPI );
 #endif
 
 #if TIKI_ENABLED( TIKI_AVR )

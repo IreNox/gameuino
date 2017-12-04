@@ -1,14 +1,12 @@
 #include "tiki_st7735.h"
 #include "tiki_st7735.inl"
 
-#include <SPI.h>
-
 namespace tiki
 {
 	ST7735::ST7735()
 	{
 		m_pCsPort	= nullptr;
-		m_pRsPort	= nullptr;
+		m_pDcPort	= nullptr;
 		m_csPinMask	= 0u;
 		m_dcPinMask	= 0u;
 	}
@@ -20,26 +18,17 @@ namespace tiki
 
 #if TIKI_ENABLED( TIKI_AVR )
 		m_pCsPort	= portOutputRegister( digitalPinToPort( s_displayCs ) );
-		m_pRsPort	= portOutputRegister( digitalPinToPort( s_displayDc ) );
+		m_pDcPort	= portOutputRegister( digitalPinToPort( s_displayDc ) );
 		m_csPinMask	= digitalPinToBitMask( s_displayCs );
 		m_dcPinMask	= digitalPinToBitMask( s_displayDc );
 #elif TIKI_ENABLED( TIKI_ARM_DUE )
 		m_pCsPort	= digitalPinToPort( s_displayCs );
-		m_pRsPort	= digitalPinToPort( s_displayDc );
+		m_pDcPort	= digitalPinToPort( s_displayDc );
 		m_csPinMask	= digitalPinToBitMask( s_displayCs );
 		m_dcPinMask	= digitalPinToBitMask( s_displayDc );
 #endif
 
 		SPI.begin();
-#if !defined(SPI_HAS_TRANSACTION)
-#	if TIKI_ENABLED( TIKI_AVR )
-		SPI.setClockDivider( SPI_CLOCK_DIV2 ); // 8 MHz
-#	elif TIKI_ENABLED( TIKI_ARM_DUE )
-		SPI.setClockDivider( 5u ); // 8 MHz
-#	endif
-		SPI.setBitOrder( MSBFIRST );
-		SPI.setDataMode( SPI_MODE0 );
-#endif
 
 		disableCs();
 		enableDataStream();
