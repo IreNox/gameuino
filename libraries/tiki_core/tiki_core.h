@@ -64,6 +64,12 @@ namespace tiki
 		uint8	y;
 	};
 
+	struct sint8x2
+	{
+		sint8	x;
+		sint8	y;
+	};
+
 	typedef uint8x2 Point;
 
 	struct Rectangle

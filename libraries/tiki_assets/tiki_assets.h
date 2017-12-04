@@ -6,7 +6,7 @@ namespace tiki
 {
 	enum AssetName : uint8;
 
-	static const uint16 s_assetMaxSize = 1024u;
+	static const uint16 s_assetMaxSize = 512u;
 
 	class Assets
 	{

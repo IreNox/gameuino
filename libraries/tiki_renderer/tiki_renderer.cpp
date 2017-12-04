@@ -53,11 +53,25 @@ namespace tiki
 			return nullptr;
 		}
 
-		pSprite->data.color = color;
+		pSprite->data.color.color = color;
+
 		return pSprite;
 	}
 
 	void* Renderer::addSolidImageSprite( const Rectangle& rect, const uint8* pImage, bool inFront /*= false*/ )
+	{
+		const uint8x2 imageOffset = { 0u, 0u };
+		return addSolidImageSprite( rect, pImage, imageOffset, inFront );
+	}
+
+	void* Renderer::addSolidImageSprite( const Rectangle& rect, const uint8* pImage, uint8x2 imageOffset, bool inFront /*= false*/ )
+	{
+		const GraphicsImage* pGraphicsImage = (const GraphicsImage*)pImage;
+		const uint8x2 imageSize = { pGraphicsImage->width, pGraphicsImage->width };
+		return addSolidImageSprite( rect, pImage, imageOffset, imageSize, inFront );
+	}
+
+	void* Renderer::addSolidImageSprite( const Rectangle& rect, const uint8* pImage, uint8x2 imageOffset, uint8x2 imageSize, bool inFront /*= false*/ )
 	{
 		Sprite* pSprite = addSprite( RendererSpriteType_SolidImage, rect, inFront );
 		if( pSprite == nullptr )
@@ -65,13 +79,19 @@ namespace tiki
 			return nullptr;
 		}
 
-		pSprite->data.pImage = pImage;
+		pSprite->data.image.pImage		= pImage;
+		pSprite->data.image.imageOffset	= imageOffset;
+		pSprite->data.image.imageSize	= imageSize;
+
 		return pSprite;
 	}
 
 	void Renderer::removeSprite( void* pSpriteVoid )
 	{
 		Sprite* pSprite = (Sprite*)pSpriteVoid;
+
+		invalidateTiles( pSprite->rect );
+
 		pSprite->type = RendererSpriteType_Invalid;
 	}
 
@@ -148,8 +168,17 @@ namespace tiki
 
 		pSprite->type		= type;
 		pSprite->rect.min	= rect.pos;
-		pSprite->rect.max.x	= rect.pos.x + rect.size.x;
-		pSprite->rect.max.y	= rect.pos.x + rect.size.y;
+		pSprite->rect.max.x	= rect.pos.x + rect.size.x - 1u;
+		pSprite->rect.max.y	= rect.pos.y + rect.size.y - 1u;
+
+		//Serial.print( "r: " );
+		//Serial.print( rect.pos.x );
+		//Serial.print( ":" );
+		//Serial.print( rect.pos.y );
+		//Serial.print( "-" );
+		//Serial.print( rect.size.x );
+		//Serial.print( ":" );
+		//Serial.println( rect.size.y );
 
 		invalidateTiles( pSprite->rect );
 
@@ -219,6 +248,11 @@ namespace tiki
 		memset( m_pixels, 0xffu, sizeof( m_pixels ) );
 		memset( m_stencil, 0u, sizeof( m_stencil ) );
 
+		//for( uint16 i = 0u; i < PixelsPerTile; ++i )
+		//{
+		//	m_pixels[ 0u ][ i ] = 0x8f00u;
+		//}
+
 		for( uint8 spriteIndex = MaxSpriteCount - 1u; spriteIndex < MaxSpriteCount; --spriteIndex )
 		{
 			const Sprite& sprite = m_sprites[ spriteIndex ];
@@ -261,16 +295,11 @@ namespace tiki
 		const uint8 endX		= min( tileRect.max.x, sprite.rect.max.x ) - tileRect.min.x;
 		const uint8 endY		= min( tileRect.max.y, sprite.rect.max.y ) - tileRect.min.y;
 
-		for( uint16 i = 0u; i < PixelsPerTile; ++i )
-		{
-			m_pixels[ 0u ][ i ] = 0x8f00u;
-		}
-
 		uint8 x = beginX;
 		uint8 y = beginY;
 		while( true )
 		{
-			m_pixels[ y ][ x ] = sprite.data.color;
+			m_pixels[ y ][ x ] = sprite.data.color.color;
 
 			x++;
 			if( x > endX )
@@ -289,18 +318,45 @@ namespace tiki
 
 	void Renderer::renderTileSolidImage( const Sprite& sprite, const BoundingRectangle& tileRect )
 	{
-		const GraphicsImage* pImage = (const GraphicsImage*)sprite.data.pImage;
+		const uint8 beginX		= max( tileRect.min.x, sprite.rect.min.x ) - tileRect.min.x;
+		const uint8 beginY		= max( tileRect.min.y, sprite.rect.min.y ) - tileRect.min.y;
+		const uint8 endX		= min( tileRect.max.x, sprite.rect.max.x ) - tileRect.min.x;
+		const uint8 endY		= min( tileRect.max.y, sprite.rect.max.y ) - tileRect.min.y;
+
+		const sint16 imageBeginX	= (sint16)tileRect.min.x - sprite.rect.min.x;
+		const sint16 imageBeginY	= (sint16)tileRect.min.y - sprite.rect.min.y;
+
+		const GraphicsImage* pImage = (const GraphicsImage*)sprite.data.image.pImage;
 		const Color* pPixels = (const Color*)pImage->imageData;
 
-		for( uint16 i = 0u; i < PixelsPerTile; ++i )
+		uint8 x = beginX;
+		uint8 y = beginY;
+		while( true )
 		{
-			m_pixels[ 0u ][ i ] = pPixels[ i ];
+			const sint16 imageX	= (max( imageBeginX + x, 0 ) % sprite.data.image.imageSize.x) + sprite.data.image.imageOffset.x;
+			const sint16 imageY	= (max( imageBeginY + y, 0 ) % sprite.data.image.imageSize.y) + sprite.data.image.imageOffset.y;
+			const uint8 imageIndex = (imageY * pImage->width) + imageX;
+
+			m_pixels[ y ][ x ] = pPixels[ imageIndex ];
+
+			x++;
+			if( x > endX )
+			{
+				x = beginX;
+				y++;
+				if( y > endY )
+				{
+					break;
+				}
+			}
 		}
+		TIKI_ASSERT( x <= TileSize );
+		TIKI_ASSERT( y <= TileSize );
 	}
 
 	void Renderer::renderTileTransparentImage( const Sprite& sprite, const BoundingRectangle& tileRect )
 	{
-		const GraphicsImage* pImage = (const GraphicsImage*)sprite.data.pImage;
+		const GraphicsImage* pImage = (const GraphicsImage*)sprite.data.image.pImage;
 		const Color* pPixels = (const Color*)pImage->imageData;
 
 		for( uint16 i = 0u; i < PixelsPerTile; ++i )

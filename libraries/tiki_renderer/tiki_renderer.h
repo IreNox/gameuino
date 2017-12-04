@@ -28,6 +28,8 @@ namespace tiki
 
 		void*	addSolidColorSprite( const Rectangle& rect, Color color, bool inFront = false );
 		void*	addSolidImageSprite( const Rectangle& rect, const uint8* pImage, bool inFront = false );
+		void*	addSolidImageSprite( const Rectangle& rect, const uint8* pImage, uint8x2 imageOffset, bool inFront = false );
+		void*	addSolidImageSprite( const Rectangle& rect, const uint8* pImage, uint8x2 imageOffset, uint8x2 imageSize, bool inFront = false );
 		void	removeSprite( void* pSprite );
 
 		void	moveSprite( void* pSprite, const Point& pos );
@@ -48,11 +50,29 @@ namespace tiki
 			StencilBytesPerTile	= PixelsPerTile / 8u
 		};
 
-		union SpriteData
+		struct SpriteColorData
 		{
 			Color			color;
+		};
+
+		struct SpriteImageData
+		{
 			const uint8*	pImage;
-			// TODO: text data
+			uint8x2			imageOffset;
+			uint8x2			imageSize;
+		};
+
+		struct SpriteTextData
+		{
+			const uint8*	pFont;
+			const char*		pText;
+		};
+
+		union SpriteData
+		{
+			SpriteColorData		color;
+			SpriteImageData		image;
+			SpriteTextData		text;
 		};
 
 		struct Sprite

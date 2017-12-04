@@ -22,14 +22,31 @@ namespace tiki
 			CellsInHeight	= 22
 		};
 
-		void*		m_pSprite3;
+		enum BlockType
+		{
+			BlockType_I,
+			BlockType_O,
+			BlockType_T,
+			BlockType_S,
+			BlockType_Z,
+			BlockType_J,
+			BlockType_L,
+
+			BlockType_Count
+		};
 
 		Assets		m_assets;
         Input		m_input;
 		Graphics	m_graphics;
 		Renderer	m_renderer;
 
-		void*		m_pSprite1;
-		void*		m_pSprite2;
+		void*		m_pWall1;
+		void*		m_pWall2;
+		void*		m_pWall3;
+
+		void*		m_pBlock1;
+		void*		m_pBlock2;
+		void*		m_pBlock3;
+		void*		m_pBlock4;
     };
 }
