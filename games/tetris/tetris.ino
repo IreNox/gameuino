@@ -1,4 +1,4 @@
-                                                                         #include "tetris.h"
+#include "tetris.h"
 
 tiki::Tetris game;
 
@@ -9,5 +9,5 @@ void setup()
 
 void loop()
 {
-  game.loop();
+	game.loop();
 }

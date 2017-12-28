@@ -3,6 +3,12 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
+		{
+			"label": "Build Assets",
+			"type": "shell",
+			"command": "${workspaceFolder}\\..\\..\\bin\\asset_builder.exe ${workspaceFolder}\\..\\..\\assets\\pong ${workspaceFolder}",
+			"problemMatcher": []
+		},
         {
             "label": "Build",
             "type": "shell",

@@ -7,12 +7,19 @@ namespace tiki
 	static const uint8 s_inputButton3		= 32u;
 	static const uint8 s_inputButton4		= 33u;
 
-	static const uint8 s_inputStickX		= PIN_A15;
-	static const uint8 s_inputStickY		= PIN_A14;
+#if TIKI_ENABLED( TIKI_AVR )
+	static const uint8 s_inputStickX		= PIN_A10;
+	static const uint8 s_inputStickY		= PIN_A11;
+#elif TIKI_ENABLED( TIKI_ARM_DUE )
+	static const uint8 s_inputStickX		= 64u;
+	static const uint8 s_inputStickY		= 65u;
+#else
+#	error "Platform not supported"
+#endif
 	static const uint8 s_inputStickButton	= 52u;
 
 	static const uint8 s_inputTolerance		= 24u;
-	
+
 	Input::Input()
 	{
 		m_currentState.stickX		= 0;
@@ -20,7 +27,7 @@ namespace tiki
 		m_currentState.buttonMask	= 0u;
 		m_previousState = m_currentState;
 	}
-	
+
 	void Input::initialize()
 	{
 		pinMode( s_inputButton1, INPUT );
@@ -50,7 +57,7 @@ namespace tiki
 		{
 			stickY = 0u;
 		}
-		
+
 		m_currentState.stickX	= stickX;
 		m_currentState.stickY	= stickY;
 

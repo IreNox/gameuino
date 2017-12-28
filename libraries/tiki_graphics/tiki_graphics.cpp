@@ -70,6 +70,11 @@ namespace tiki
 				y += (font.characterHeight * size) + spacing;
 				continue;
 			}
+			else if( c == ' ' )
+			{
+				x += (font.characterWidth * size) + spacing;
+				continue;
+			}
 
 			drawChar( x, y, pFont, c, color, size );
 			x += (font.characterWidth * size) + spacing;

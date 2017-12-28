@@ -9,7 +9,7 @@ int color = 0xffff;
 void setup()
 {
 	graphics.initialize();
-	graphics.fillScreen( 0x0000u );
+	graphics.fillScreen( tiki::GraphicsColorBlack );
 }
 
 void loop()

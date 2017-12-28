@@ -36,7 +36,7 @@ namespace tiki
 		m_player2.scoreRect.pos.y	= 12u;
 		m_player2.scoreRect.size.x	= 4u * 4u;
 		m_player2.scoreRect.size.y	= 5u * 4u;
-		
+
 		m_ballRect.pos.x			= 0u;
 		m_ballRect.pos.y			= 0u;
 		m_ballRect.size.x			= 4u;
@@ -45,7 +45,7 @@ namespace tiki
 		m_ballSpeedY				= 0;
 		m_ballDirectionX			= -1;
 		m_ballDirectionY			= 1;
-		
+
 		drawGame();
 		drawPlayer( m_player1.rect.pos.x, m_player1.rect.pos.y, m_player1.rect.pos.y );
 		drawPlayer( m_player2.rect.pos.x, m_player2.rect.pos.y, m_player2.rect.pos.y );
@@ -62,7 +62,7 @@ namespace tiki
 		updateHumanPlayer();
 		updateAiPlayer();
 		updateBall();
-		
+
 		const int frameEndTime = millis();
 		const int elapsedTime = frameEndTime - frameStartTime;
 		Serial.println( elapsedTime );
@@ -97,7 +97,7 @@ namespace tiki
 
 		player.speedY = (player.speedY + inputState) / 2;
 		player.moveY -= (inputState * 250);
-		
+
 		if( abs( player.moveY ) < (512 * 60) )
 		{
 			return;
@@ -194,7 +194,7 @@ namespace tiki
 			m_ballRect.pos.x = 4u;
 
 			const uint8 oldScore = m_player2.score;
-			m_player2.score++;			
+			m_player2.score++;
 			m_ballSpeedX		= 0u;
 			m_ballDirectionX	= -1;
 

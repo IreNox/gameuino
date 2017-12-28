@@ -4,10 +4,8 @@
 
 namespace tiki
 {
-	static const uint8 s_displayCs			= 53u;
+	static const uint8 s_displayCs			= 10u;
 	static const uint8 s_displayDc			= 9u;
-	//static const uint8 s_displayMosi		= 51u;
-	//static const uint8 s_displaySclk		= 52u;
 	static const uint8 s_displayRst			= 8u;  // you can also connect this to the Arduino reset
 
 	static const uint8 s_displayWidth		= 160u;

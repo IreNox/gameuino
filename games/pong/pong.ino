@@ -9,5 +9,5 @@ void setup()
 
 void loop()
 {
-  game.loop();
+	game.loop();
 }

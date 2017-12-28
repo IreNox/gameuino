@@ -121,7 +121,7 @@ namespace tiki
 		m_input.update();
 
 		const Point pos = { y, y };
-		//m_renderer.moveSprite( m_pSprite1, pos );
+		m_renderer.moveSprite( m_pBlock1, pos );
 		y += 5u;
 		if( y == 100u )
 		{

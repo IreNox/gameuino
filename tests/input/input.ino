@@ -1,40 +1,45 @@
+#include "tiki_assets.h"
 #include "tiki_input.h"
 #include "tiki_graphics.h"
 
+#include "asset_data.h"
+
+tiki::Assets assets;
 tiki::Input input;
 tiki::Graphics graphics;
 
 void setup()
 {
+	assets.initialize( tiki::s_assets, tiki::AssetName_Count );
+	
     input.initialize();
 
     graphics.initialize();
-    graphics.fillScreen( 0x0000u );
+    graphics.fillScreen( tiki::GraphicsColorBlack );
 
-    ST7735& tft = graphics.getTft();
-    tft.drawString(0, 0, "StickX:", 0xffffu );
-    tft.drawString(0, 8, "StickY:", 0xffffu );
-    tft.drawString(0, 16, "Button:", 0xffffu );
+	const void* pFont = assets.loadAsset( tiki::AssetName_Font );
+    graphics.drawText(0, 0, pFont, "STICK X:", tiki::GraphicsColorWhite );
+    graphics.drawText(0, 8, pFont, "STICK Y:", tiki::GraphicsColorWhite );
+    graphics.drawText(0, 16, pFont, "BUTTONS:", tiki::GraphicsColorWhite );
 }
 
 void loop()
 {
     input.update();
 
-    ST7735& tft = graphics.getTft();
     const tiki::InputState& inputState = input.getCurrentState();
-    
+	const void* pFont = assets.loadAsset( tiki::AssetName_Font );
     char buffer[ 128u ];
     
     sprintf( buffer, "%+d", inputState.stickX );
-    tft.fillRect( 48, 0, 24, 7, 0x0000u );
-    tft.drawString( 48, 0, buffer, 0xffffu );
+    graphics.drawRectangle( 63, 0, 30, 7, tiki::GraphicsColorBlack );
+    graphics.drawText( 63, 0, pFont, buffer, tiki::GraphicsColorWhite );
 
     sprintf( buffer, "%+d", inputState.stickY );
-    tft.fillRect( 48, 8, 24, 7, 0x0000u );
-    tft.drawString( 48, 8, buffer, 0xffffu );
+    graphics.drawRectangle( 63, 8, 30, 7, tiki::GraphicsColorBlack );
+    graphics.drawText( 63, 8, pFont, buffer, tiki::GraphicsColorWhite );
 
-    sprintf( buffer, "%02x", inputState.buttonMask );
-    tft.fillRect( 48, 16, 12, 7, 0x0000u );
-    tft.drawString( 48, 16, buffer, 0xffffu );
+    sprintf( buffer, "%01x", inputState.buttonMask );
+    graphics.drawRectangle( 63, 16, 14, 7, tiki::GraphicsColorBlack );
+    graphics.drawText( 63, 16, pFont, buffer, tiki::GraphicsColorWhite );
 }
