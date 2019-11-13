@@ -30,16 +30,18 @@ void loop()
     const tiki::InputState& inputState = input.getCurrentState();
 	const void* pFont = assets.loadAsset( tiki::AssetName_Font );
     char buffer[ 128u ];
-    
-    sprintf( buffer, "%+d", inputState.stickX );
-    graphics.drawRectangle( 63, 0, 30, 7, tiki::GraphicsColorBlack );
-    graphics.drawText( 63, 0, pFont, buffer, tiki::GraphicsColorWhite );
 
-    sprintf( buffer, "%+d", inputState.stickY );
-    graphics.drawRectangle( 63, 8, 30, 7, tiki::GraphicsColorBlack );
-    graphics.drawText( 63, 8, pFont, buffer, tiki::GraphicsColorWhite );
+    //sprintf( buffer, "%+d", inputState.stickX );
+    //graphics.drawRectangle( 63, 0, 30, 7, tiki::GraphicsColorBlack );
+    //graphics.drawText( 63, 0, pFont, buffer, tiki::GraphicsColorWhite );
 
-    sprintf( buffer, "%01x", inputState.buttonMask );
-    graphics.drawRectangle( 63, 16, 14, 7, tiki::GraphicsColorBlack );
+    //sprintf( buffer, "%+d", inputState.stickY );
+    //graphics.drawRectangle( 63, 8, 30, 7, tiki::GraphicsColorBlack );
+    //graphics.drawText( 63, 8, pFont, buffer, tiki::GraphicsColorWhite );
+
+    sprintf( buffer, "%04X", inputState.buttonMask );
+    graphics.drawRectangle( 63, 16, 28, 7, tiki::GraphicsColorBlack );
     graphics.drawText( 63, 16, pFont, buffer, tiki::GraphicsColorWhite );
+
+    delay( 100u );
 }

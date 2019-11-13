@@ -125,4 +125,7 @@ namespace tiki
 		uint8x2	min;
 		uint8x2	max;
 	};
+
+	void toLower( char* pBuffer, uint8 bufferLength );
+	void toUpper( char* pBuffer, uint8 bufferLength );
 }
